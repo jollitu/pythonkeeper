@@ -1,16 +1,36 @@
 from flask import render_template, flash, redirect
-from app import app
+from flask_login import current_user
+
+from app import app, db
 from app.forms import LoginForm
 
 
 # TODO return an object for the front end to consume
-@app.route("/login", methods=["GET", "POST"])
+from app.models import User
+
+
+@app.route("/login", methods=["POST"])
 def login():
+    if current_user.is_authenticated:
+        return ""
+
     form = LoginForm()
 
     if form.validate_on_submit():
-        flash("Login requested for user {}, remember me = {}".format(
-            form.username.data, form.remember_me.data
-        ))
-        return redirect("/index")
-    return render_template("login.html", title="Sign In", form=form)
+        return "{\"username\": " + current_user.__repr__ + "}"
+
+    return "{}"
+
+
+@app.route("/logout", methods=["POST"])
+def logout(username):
+    pass
+
+
+@app.route("/register", methods=["POST"])
+def register(username, password, email):
+    user = User(username, password, email)
+    db.session.add(user)
+    db.session.commit()
+
+    return "{}"

@@ -11,6 +11,8 @@ flask-sqlalchemy = "*"
 routes = "*"
 flask-wtf = "*"
 flask-login = "*"
+email-validator = "*"
+pymarshaler = "*"
 
 [requires]
 python_version = "3.8"
